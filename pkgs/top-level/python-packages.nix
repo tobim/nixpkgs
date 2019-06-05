@@ -305,6 +305,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  bro_broker = (toPythonModule (pkgs.bro.override{ inherit python; }));
+
   brotli = callPackage ../development/python-modules/brotli { };
 
   broadlink = callPackage ../development/python-modules/broadlink { };

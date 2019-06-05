@@ -1115,7 +1115,9 @@ in
 
   brltty = callPackage ../tools/misc/brltty { };
 
-  bro = callPackage ../applications/networking/ids/bro { };
+  bro = callPackage ../applications/networking/ids/bro {
+    python = python3;
+  };
 
   brook = callPackage ../tools/networking/brook { };
 
