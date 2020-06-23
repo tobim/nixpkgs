@@ -61,7 +61,7 @@ let
           echo "-target ${targetConfig}" >> $out/nix-support/cc-cflags
           echo "-B${gcc.cc}/lib/gcc/${targetConfig}/${gcc.version}" >> $out/nix-support/cc-cflags
           echo "-L${gcc.cc}/lib/gcc/${targetConfig}/${gcc.version}" >> $out/nix-support/cc-ldflags
-          echo "-L${gcc.cc.lib}/${targetConfig}/lib" >> $out/nix-support/cc-ldflags
+          echo "-L${gcc.cc.lib}/lib" >> $out/nix-support/cc-ldflags
       '' + mkExtraBuildCommands cc;
     };
 
