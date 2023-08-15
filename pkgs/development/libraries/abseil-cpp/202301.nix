@@ -4,7 +4,10 @@
 , cmake
 , gtest
 , static ? stdenv.hostPlatform.isStatic
-, cxxStandard ? null
+ # TODO: default to `null` after all major toolchains have been upgraded to
+ # versions that default to c++17. Only LLVM/clang is missing.
+ # https://github.com/NixOS/nixpkgs/pull/241692.
+, cxxStandard ? "17"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DABSL_BUILD_TEST_HELPERS=ON"
     "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ] ++ lib.optionals (cxxStandard != null) [
     "-DCMAKE_CXX_STANDARD=${cxxStandard}"
   ];
 

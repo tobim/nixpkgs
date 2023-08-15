@@ -26,6 +26,12 @@ buildPythonPackage rec {
     ./cmake.patch
   ];
 
+  # Build with c++17 to align with abseil.
+  postPatch = ''
+    substituteInPlace tree/CMakeLists.txt \
+      --replace 'CMAKE_CXX_STANDARD 14' 'CMAKE_CXX_STANDARD 17'
+  '';
+
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [

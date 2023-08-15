@@ -42,17 +42,10 @@ buildPythonPackage {
     fi
   '';
 
-  # Remove the line in setup.py that forces compiling with C++14. Upstream's
-  # CMake build has been updated to support compiling with other versions of
-  # C++, but the Python build has not. Without this, we observe compile-time
-  # errors using GCC.
-  #
-  # Fedora appears to do the same, per this comment:
-  #
-  #   https://github.com/protocolbuffers/protobuf/issues/12104#issuecomment-1542543967
-  #
+  # Build native code with c++17 to align with abseil.
   postPatch = ''
-    sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
+    substituteInPlace setup.py \
+      --replace '-std=c++14' '-std=c++17'
   '';
 
   nativeBuildInputs = lib.optional isPyPy tzdata;

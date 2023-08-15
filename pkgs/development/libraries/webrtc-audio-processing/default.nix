@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchFromGitLab
 , darwin
 , abseil-cpp
 , meson
 , ninja
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "webrtc-audio-processing";
-  version = "1.0";
+  version = "unstable-2023-08-14";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v${version}/webrtc-audio-processing-v${version}.tar.gz";
-    sha256 = "sha256-dqRy1OfOG9TX2cgCD8cowU44zVanns/nPYZrilPfuiU=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pulseaudio";
+    repo = "webrtc-audio-processing";
+    rev = "315b2222a858f3dd9edd2ca04c531ca66ef9b713";
+    sha256 = "sha256-ExBZ/09eZiCuyv2xHHhto0VURm14hhzx530XritVbjA=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [
