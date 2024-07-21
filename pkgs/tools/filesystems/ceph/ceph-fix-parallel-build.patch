@@ -1,0 +1,20 @@
+diff --git a/src/common/options/CMakeLists.txt b/src/common/options/CMakeLists.txt
+index f12a5513a63..9577d51820d 100644
+--- a/src/common/options/CMakeLists.txt
++++ b/src/common/options/CMakeLists.txt
+@@ -25,13 +25,12 @@ endfunction()
+ function(add_options name)
+   set(yaml_in_file ${CMAKE_CURRENT_SOURCE_DIR}/${name}.yaml.in)
+   set(yaml_file ${CMAKE_CURRENT_BINARY_DIR}/${name}.yaml)
+-  file_configure("${yaml_in_file}"
+-    "${yaml_file}" @ONLY)
++  configure_file("${yaml_in_file}" "${yaml_file}" @ONLY)
+   list(APPEND options_yamls ${yaml_file})
+   set(options_yamls ${options_yamls} PARENT_SCOPE)
+   set(cc_file "${name}_options.cc")
+   set(h_file "${PROJECT_BINARY_DIR}/include/${name}_legacy_options.h")
+-  add_custom_command(PRE_BUILD
++  add_custom_command(
+     OUTPUT ${cc_file} ${h_file}
+     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/y2c.py
+       --input ${yaml_file}

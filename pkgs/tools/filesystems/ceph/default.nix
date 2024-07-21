@@ -6,10 +6,13 @@
 , fetchPypi
 
 # Build time
+, autoconf
+, automake
 , cmake
 , ensureNewerSourcesHook
 , fmt
 , git
+, libtool
 , makeWrapper
 , nasm
 , pkg-config
@@ -21,7 +24,7 @@
 # Runtime dependencies
 , arrow-cpp
 , babeltrace
-, boost179
+, boost182
 , bzip2
 , cryptsetup
 , cunit
@@ -36,6 +39,7 @@
 , libcap_ng
 , libnl
 , libxml2
+, lmdb
 , lttng-ust
 , lua
 , lz4
@@ -263,7 +267,7 @@ let
     };
   };
 
-  boost = boost179.override {
+  boost = boost182.override {
     enablePython = true;
     inherit python;
   };
@@ -281,6 +285,7 @@ let
     influxdb
     jinja2
     kubernetes
+    markupsafe
     natsort
     numpy
     pecan
@@ -308,20 +313,19 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "18.2.1";
+  version = "19.1.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-gHWwNHf0KtI7Hv0MwaCqP6A3YR/AWakfUZTktRyddko=";
+    hash = "sha256-vKZOVj2cpK6VbvG8F/AzjiBrUCXhyDL+3OwiyuPghOY=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
 
-    postPatch = ''
-      substituteInPlace cmake/modules/Finduring.cmake \
-        --replace-fail "liburing.a liburing" "uring"
-    '';
+    patches = [
+      ./ceph-fix-parallel-build.patch
+    ];
 
     nativeBuildInputs = [
       cmake
@@ -335,6 +339,10 @@ in rec {
       python.pkgs.wrapPython
       which
       (ensureNewerSourcesHook { year = "1980"; })
+      # for bundled qatlib
+      autoconf
+      automake
+      libtool
       # for building docs/man-pages presumably
       doxygen
       graphviz
@@ -356,6 +364,7 @@ in rec {
       libcap
       libnl
       libxml2
+      lmdb
       lttng-ust
       lua
       lz4
@@ -442,6 +451,9 @@ in rec {
       "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
       "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
       "-DWITH_SYSTEM_ZSTD:BOOL=ON"
+
+      # Use the python environment created above for cephadm.
+      "-DCEPHADM_BUNDLED_DEPENDENCIES=none"
 
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
