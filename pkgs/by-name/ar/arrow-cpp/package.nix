@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch2,
   fixDarwinDylibNames,
   autoconf,
   aws-sdk-cpp,
@@ -124,6 +125,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v0.44.0";
     hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "arrow-cpp-libcxx19-compat.patch";
+      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
+      hash = "sha256-9739I0TGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
