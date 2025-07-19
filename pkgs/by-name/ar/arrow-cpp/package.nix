@@ -66,19 +66,19 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "d2a13712303498963395318a4eb42872e66aead7";
-    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
+    rev = "9a02925d1ba80bd493b6d4da6e8a777588d57ac4";
+    hash = "sha256-dEFCkeQpQrU61uCwJp/XB2umbQHjXtzado36BGChoc0=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "18d17540097fca7c40be3d42c167e6bfad90763c";
-    hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
+    rev = "a3d96a65e11e2bbca7d22a894e8313ede90a33a3";
+    hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "20.0.0";
+  version = "22.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
+    hash = "sha256-i4Smt43oi4sddUt3qH7ePjensBSfPW+w/ExLVcVNKic=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -107,21 +107,21 @@ stdenv.mkDerivation (finalAttrs: {
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v2.0.6";
-    hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
+    tag = "v3.1.5";
+    hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
   };
 
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "13.0.0";
+    tag = "13.0.0";
     hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.44.0";
+    tag = "v0.44.0";
     hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
   };
 
