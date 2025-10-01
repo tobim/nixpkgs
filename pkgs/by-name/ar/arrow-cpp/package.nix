@@ -17,6 +17,7 @@
       "transfer"
     ];
   },
+  azure-sdk-for-cpp,
   boost,
   brotli,
   bzip2,
@@ -59,6 +60,7 @@
   enableS3 ? true,
   # google-cloud-cpp fails to build on RiscV
   enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
+  enableAzure ? true,
 }:
 
 let
@@ -170,6 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     google-cloud-cpp
     grpc
     nlohmann_json
+  ]
+  ++ lib.optionals enableAzure [
+    azure-sdk-for-cpp.identity
+    azure-sdk-for-cpp.storage-blobs
+    azure-sdk-for-cpp.storage-files-datalake
   ];
 
   # apache-orc looks for things in caps
@@ -224,6 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    "-DARROW_AZURE=${if enableAzure then "ON" else "OFF"}"
     "-DARROW_ORC=ON"
     # Parquet options:
     "-DARROW_PARQUET=ON"
