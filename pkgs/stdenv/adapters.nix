@@ -177,8 +177,15 @@ rec {
           configureFlags = (args.configureFlags or [ ]) ++ [
             "--enable-static"
             "--disable-shared"
+          ] ++ lib.optionals (with stdenv.hostPlatform; (isAarch && isLinux)) [
+            "CFLAGS=-fPIC"
+            "CXXFLAGS=-fPIC"
           ];
-          cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
+          cmakeFlags = (args.cmakeFlags or [ ]) ++ [
+            "-DBUILD_SHARED_LIBS:BOOL=OFF"
+          ] ++ lib.optionals (with stdenv.hostPlatform; (isAarch && isLinux)) [
+            "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
+          ];
           mesonFlags = (args.mesonFlags or [ ]) ++ [
             "-Ddefault_library=static"
             "-Ddefault_both_libraries=static"
